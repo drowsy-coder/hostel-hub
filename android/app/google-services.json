@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "371108091839",
+    "project_id": "law-help-d64da",
+    "storage_bucket": "law-help-d64da.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371108091839:android:20c91bad385e1efff3730a",
+        "android_client_info": {
+          "package_name": "com.sunflower.law_help"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBet6WxEQ2tHcK6XjM8Lrdjiy_zV4gWph8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
