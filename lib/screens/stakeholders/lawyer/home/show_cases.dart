@@ -2,12 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() {
-  runApp(MaterialApp(
-    home: ComplaintsList(),
-  ));
-}
-
 class ComplaintsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -28,6 +22,17 @@ class ComplaintsListView extends StatefulWidget {
 class _ComplaintsListViewState extends State<ComplaintsListView> {
   List<int> selectedComplaints = [];
   List<QueryDocumentSnapshot> complaints = [];
+
+  void removeSelectedComplaints() {
+    // Remove selected complaints from the list.
+    selectedComplaints.sort((a, b) => b.compareTo(a)); // Sort in reverse order.
+    for (var index in selectedComplaints) {
+      complaints.removeAt(index);
+    }
+    setState(() {
+      selectedComplaints.clear();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +72,8 @@ class _ComplaintsListViewState extends State<ComplaintsListView> {
                   return Dismissible(
                     key: UniqueKey(),
                     direction: DismissDirection.endToStart,
-                    onDismissed: (direction) async {
-                      await FirebaseFirestore.instance
-                          .collection('complaints')
-                          .doc(complaints[index]
-                              .id) // Use the Firestore document ID
-                          .delete();
+                    onDismissed: (direction) {
                       setState(() {
-                        selectedComplaints.remove(index);
                         complaints.removeAt(index);
                       });
                     },
