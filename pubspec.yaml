@@ -68,6 +68,7 @@ dependencies:
   flutter_face_api: ^5.2.2
   image_picker: ^1.0.4
   dropdown_textfield: ^1.0.8
+  gradient_borders: ^1.0.0
 
 
 
