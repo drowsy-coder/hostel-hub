@@ -1,9 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:bubble/bubble.dart';
-import 'package:dialogflow_flutter/googleAuth.dart';
 import 'package:flutter/material.dart';
-import 'package:dialogflow_flutter/dialogflowFlutter.dart';
 
 class ChatBotScreen extends StatefulWidget {
   const ChatBotScreen({super.key});
@@ -14,20 +13,8 @@ class ChatBotScreen extends StatefulWidget {
 
 class _ChatBotScreenState extends State<ChatBotScreen> {
   final messageInsert = TextEditingController();
-  List<Map<String, dynamic>> messsages = [];
-
-  void response(query) async {
-    AuthGoogle authGoogle =
-        await AuthGoogle(fileJson: "assets/json/dialog_flow_auth.json").build();
-    DialogFlow dialogflow = DialogFlow(authGoogle: authGoogle, language: "en");
-    AIResponse aiResponse = await dialogflow.detectIntent(query);
-    setState(() {
-      messsages.insert(0, {
-        "data": 0,
-        "message": aiResponse.getListMessage()![0]["text"]["text"][0].toString()
-      });
-    });
-  }
+  final ScrollController _scrollController = ScrollController();
+  List<Map<String, dynamic>> _chatHistory = [];
 
   @override
   Widget build(BuildContext context) {
@@ -42,58 +29,140 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
           ),
         ),
         elevation: 10,
-        title: const Text("Dialog Flow Chatbot"),
+        title: const Text("Mental Health Chatbot"),
       ),
-      body: Column(
-        children: <Widget>[
-          Flexible(
-            child: ListView.builder(
-                reverse: true,
-                itemCount: messsages.length,
-                itemBuilder: (context, index) => chat(
-                    messsages[index]["message"].toString(),
-                    messsages[index]["data"])),
-          ),
-          const Divider(
-            height: 6.0,
-          ),
+      body: Stack(
+        children: [
           Container(
-            padding:
-                const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20),
-            margin: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              children: <Widget>[
-                Flexible(
-                    child: TextField(
-                  controller: messageInsert,
-                  decoration: const InputDecoration.collapsed(
-                      hintText: "Send your message",
-                      hintStyle: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18.0)),
-                )),
-                Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                    child: IconButton(
-                        icon: const Icon(
-                          Icons.send,
-                          size: 30.0,
-                        ),
-                        onPressed: () {
-                          if (messageInsert.text.isEmpty) {
-                          } else {
-                            setState(() {
-                              messsages.insert(0,
-                                  {"data": 1, "message": messageInsert.text});
-                            });
-                            response(messageInsert.text);
-                            messageInsert.clear();
-                          }
-                        }))
-              ],
+            //get max height
+            height: MediaQuery.of(context).size.height - 160,
+            child: ListView.builder(
+              itemCount: _chatHistory.length,
+              shrinkWrap: false,
+              controller: _scrollController,
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
+              physics: const BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Container(
+                  padding:
+                      EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
+                  child: Align(
+                    alignment: (_chatHistory[index]["isSender"]
+                        ? Alignment.topRight
+                        : Alignment.topLeft),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                        color: (_chatHistory[index]["isSender"]
+                            ? Color.fromARGB(255, 0, 0, 0)
+                            : Colors.white),
+                      ),
+                      padding: EdgeInsets.all(16),
+                      child: Text(_chatHistory[index]["message"],
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: _chatHistory[index]["isSender"]
+                                  ? Colors.white
+                                  : Colors.black)),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
-          const SizedBox(
-            height: 15.0,
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              height: 60,
+              width: double.infinity,
+              color: const Color.fromARGB(255, 0, 0, 0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color.fromARGB(255, 0, 0, 0),
+                              Color.fromARGB(255, 0, 0, 0),
+                            ]),
+                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: TextField(
+                          decoration: const InputDecoration(
+                            hintText: "Type a message",
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.all(8.0),
+                          ),
+                          controller: messageInsert,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 4.0,
+                  ),
+                  MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        if (messageInsert.text.isNotEmpty) {
+                          _chatHistory.add({
+                            "time": DateTime.now(),
+                            "message": messageInsert.text,
+                            "isSender": true,
+                          });
+                          messageInsert.clear();
+                        }
+                      });
+                      _scrollController.jumpTo(
+                        _scrollController.position.maxScrollExtent,
+                      );
+
+                      getAnswer();
+                    },
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(80.0)),
+                    padding: const EdgeInsets.all(0.0),
+                    child: Ink(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color(0xFFF69170),
+                              Color(0xFFF69170),
+                            ]),
+                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                      ),
+                      child: Container(
+                          constraints: const BoxConstraints(
+                              minWidth: 88.0,
+                              minHeight:
+                                  36.0), // min sizes for Material buttons
+                          alignment: Alignment.center,
+                          child: const Icon(
+                            Icons.send,
+                            color: Colors.black,
+                          )),
+                    ),
+                  )
+                ],
+              ),
+            ),
           )
         ],
       ),
@@ -105,7 +174,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
       padding: const EdgeInsets.all(10.0),
       child: Bubble(
         radius: const Radius.circular(15.0),
-        color: data == 0 ? Colors.blue : Colors.orangeAccent,
+        color: data == 0 ? Colors.blue : Colors.orange,
         elevation: 0.0,
         alignment: data == 0 ? Alignment.topLeft : Alignment.topRight,
         nip: data == 0 ? BubbleNip.leftBottom : BubbleNip.rightTop,
@@ -126,12 +195,46 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                   child: Text(
                 message,
                 style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold),
+                    color: Colors.black, fontWeight: FontWeight.bold),
               ))
             ],
           ),
         ),
       ),
+    );
+  }
+
+  void getAnswer() async {
+    final url =
+        "https://generativelanguage.googleapis.com/v1beta2/models/chat-bison-001:generateMessage?key=AIzaSyDSBUzYXvYfxV9p_ATprNMm6luUdvrUTbg";
+    final uri = Uri.parse(url);
+    List<Map<String, String>> msg = [];
+    for (var i = 0; i < _chatHistory.length; i++) {
+      msg.add({"content": _chatHistory[i]["message"]});
+    }
+
+    Map<String, dynamic> request = {
+      "prompt": {
+        "messages": [msg]
+      },
+      "temperature": 0.25,
+      "candidateCount": 1,
+      "topP": 1,
+      "topK": 1
+    };
+
+    final response = await http.post(uri, body: jsonEncode(request));
+
+    setState(() {
+      _chatHistory.add({
+        "time": DateTime.now(),
+        "message": json.decode(response.body)["candidates"][0]["content"],
+        "isSender": false,
+      });
+    });
+
+    _scrollController.jumpTo(
+      _scrollController.position.maxScrollExtent,
     );
   }
 }
