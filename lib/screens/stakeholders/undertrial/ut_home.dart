@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:law_help/screens/stakeholders/undertrial/fir_analyser.dart';
+import 'package:law_help/screens/stakeholders/undertrial/support%20screens/mental/chat_support.dart';
 import 'support screens/no_case.dart';
 
 class UTHome extends StatefulWidget {
-  const UTHome({super.key});
+  const UTHome({Key? key}) : super(key: key);
 
   @override
   _UTHomeState createState() => _UTHomeState();
@@ -55,18 +56,16 @@ class _UTHomeState extends State<UTHome> {
         return Scaffold(
           appBar: AppBar(
             title: const Text('Hello!'),
-            actions: [
+            actions: <Widget>[
               IconButton(
+                icon: const Icon(Icons.chat_bubble_outline_sharp),
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => const CaseInfoAnalyzer(),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ChatBotScreen()),
+                  );
                 },
-                icon: const Icon(Icons.search),
-              ),
+              )
             ],
           ),
           body: SingleChildScrollView(
