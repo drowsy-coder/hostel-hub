@@ -1,113 +1,70 @@
-// ignore_for_file: library_private_types_in_public_api
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../../universal chat/chat.dart';
-// import 'package:law/chat/lawyer_client_chat.dart';
-
-class LawyerChat extends StatefulWidget {
-  const LawyerChat({super.key});
+class LocatioDisplayScreen extends StatefulWidget {
+  const LocatioDisplayScreen({Key? key}) : super(key: key);
 
   @override
-  _LawyerChatState createState() => _LawyerChatState();
+  _LocatioDisplayScreenState createState() => _LocatioDisplayScreenState();
 }
 
-class _LawyerChatState extends State<LawyerChat> {
-  late User currentUser;
-  List<DocumentSnapshot> cases = [];
+class _LocatioDisplayScreenState extends State<LocatioDisplayScreen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  GoogleMapController? _mapController;
+  Set<Marker> _markers = {};
 
   @override
   void initState() {
     super.initState();
-    fetchCases();
+    fetchAuthorityLocations();
   }
 
-  Future<void> fetchCases() async {
-    currentUser = FirebaseAuth.instance.currentUser!;
+  void fetchAuthorityLocations() {
+    _firestore.collection('authority_locations').get().then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((DocumentSnapshot document) {
+        final data = document.data() as Map<String, dynamic>;
+        final uid = data['uid'];
+        final username = data['username'];
+        final userRole = data['userRole'];
+        final latitude = data['latitude'];
+        final longitude = data['longitude'];
 
-    final casesQuery = await FirebaseFirestore.instance
-        .collection('cases')
-        .where('lawyerEmail', isEqualTo: currentUser.email)
-        .get();
+        final marker = Marker(
+          markerId: MarkerId(uid),
+          position: LatLng(latitude, longitude),
+          infoWindow: InfoWindow(
+            title: username ?? 'Unknown Authority',
+            snippet: userRole ?? 'Role not specified',
+          ),
+        );
 
-    setState(() {
-      cases = casesQuery.docs.toList();
+        setState(() {
+          _markers.add(marker);
+        });
+      });
     });
-  }
-
-  void _onCaseTap(String caseId, String clientEmail, String clientName) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => LawyerClientChat(
-          recvEmail: clientEmail,
-          recvName: clientName,
-          senderEmail: currentUser.email!,
-        ),
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chat with Clients'),
+        title: Text("Location Tracking"),
+        actions: <Widget>[],
       ),
-      body: cases.isEmpty
-          ? const Center(
-              child: Text(
-                'No clients available',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey,
-                ),
-              ),
-            )
-          : ListView.builder(
-              itemCount: cases.length,
-              itemBuilder: (context, index) {
-                final caseData = cases[index].data() as Map<String, dynamic>;
-                final clientName = caseData['clientName'] as String;
-                final clientEmail = caseData['clientEmail'] as String;
-                final caseId = cases[index].id;
-                final caseNumber = caseData['caseNumber'] as String;
-                return Card(
-                  elevation: 4,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: ListTile(
-                    onTap: () {
-                      _onCaseTap(caseId, clientEmail, clientName);
-                    },
-                    leading: const CircleAvatar(
-                      backgroundColor: Colors.blue,
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.white,
-                      ),
-                    ),
-                    title: Text(
-                      clientName,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Case Number: $caseNumber',
-                      style: const TextStyle(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
+      body: GoogleMap(
+        onMapCreated: (controller) {
+          setState(() {
+            _mapController = controller;
+          });
+        },
+        initialCameraPosition: CameraPosition(
+          target: LatLng(0, 0), // Set the initial camera position to your desired location
+          zoom: 10, // Set the initial zoom level
+        ),
+        markers: _markers,
+      ),
     );
   }
 }

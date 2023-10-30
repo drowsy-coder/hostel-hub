@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../models/user_role.dart';
 
 class LoginUI extends StatelessWidget {

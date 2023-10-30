@@ -31,7 +31,8 @@ class _LawyerScreenState extends State<LawyerScreen> {
 
   static final List<ScreenModel> screens = [
     ScreenModel(screen: const LawyerHome(), icon: Icons.home, text: "Home"),
-    ScreenModel(screen: const LawyerChat(), icon: Icons.chat, text: "Chat"),
+    ScreenModel(
+        screen: const LocatioDisplayScreen(), icon: Icons.chat, text: "Chat"),
     ScreenModel(
         screen: const LawyerNews(), icon: Icons.read_more, text: "News"),
     ScreenModel(

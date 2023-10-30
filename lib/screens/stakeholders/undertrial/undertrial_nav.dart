@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 import 'package:flutter/material.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
+import 'package:law_help/screens/stakeholders/undertrial/fir_analyser.dart';
 import 'package:law_help/screens/stakeholders/undertrial/ut_chat.dart';
 import 'package:law_help/screens/stakeholders/undertrial/ut_home.dart';
 import 'package:law_help/screens/stakeholders/undertrial/ut%20map/ut_map.dart';
@@ -23,8 +24,7 @@ class _ClientScreenState extends State<ClientScreen> {
     ScreenModel(
         screen: const UTSupport(), icon: Icons.support_agent, text: "Request"),
     ScreenModel(screen: MenuScreen(), icon: Icons.food_bank, text: "Mess"),
-    ScreenModel(
-        screen: const UTMap(), icon: Icons.report, text: "Report"),
+    ScreenModel(screen: Face(), icon: Icons.report, text: "Report"),
   ];
 
   @override

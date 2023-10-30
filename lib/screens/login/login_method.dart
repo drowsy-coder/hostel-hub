@@ -1,12 +1,11 @@
-// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:law_help/screens/stakeholders/court/court_nav.dart';
-import 'package:law_help/screens/stakeholders/lawyer/lawyer_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../models/user_role.dart';
+import '../stakeholders/court/court_nav.dart';
+import '../stakeholders/lawyer/lawyer_nav.dart';
 import '../stakeholders/undertrial/undertrial_nav.dart';
 import 'login_ui.dart';
 
@@ -55,21 +54,8 @@ class _LoginPageState extends State<LoginPage> {
           _userRole = stringToUserRole(storedUserRole);
         });
 
-        if (_userRole == UserRole.student) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ClientScreen(),
-            ),
-          );
-        } else if (_userRole == UserRole.authorities) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const LawyerScreen(),
-            ),
-          );
-        }
+        // Redirect the user to the appropriate screen
+        _redirectToRequiredScreen();
       }
     }
   }
@@ -103,17 +89,10 @@ class _LoginPageState extends State<LoginPage> {
         final UserRole userRole = stringToUserRole(storedUserRole);
 
         if (userRole == _userRole) {
-          if (_userRole == UserRole.student) {
-            _saveUserDataToPrefs(uid, email);
-            _prefs.setBool('isLoggedIn', true);
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const ClientScreen()));
-          } else if (_userRole == UserRole.authorities) {
-            _saveUserDataToPrefs(uid, email);
-            _prefs.setBool('isLoggedIn', true);
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const LawyerScreen()));
-          }
+          _saveUserDataToPrefs(uid, email);
+
+          // Redirect the user to the appropriate screen
+          _redirectToRequiredScreen();
 
           setState(() {
             _isLoading = false;
@@ -125,6 +104,30 @@ class _LoginPageState extends State<LoginPage> {
         _isLoading = false;
       });
     }
+  }
+
+  void _redirectToRequiredScreen() {
+    if (_userRole == UserRole.student) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ClientScreen(),
+        ),
+      );
+    } else if (_userRole == UserRole.authorities) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LawyerScreen(),
+        ),
+      );
+    }
+  }
+
+  void _toggleFormMode() {
+    setState(() {
+      _isLoginForm = !_isLoginForm;
+    });
   }
 
   Future<void> _createAccount(String email, String password) async {
@@ -145,15 +148,8 @@ class _LoginPageState extends State<LoginPage> {
 
       _saveUserDataToPrefs(uid, email);
 
-      _prefs.setBool('isLoggedIn', true);
-
-      if (_userRole == UserRole.student) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const ClientScreen()));
-      } else if (_userRole == UserRole.authorities) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const LawyerScreen()));
-      }
+      // Redirect the user to the appropriate screen
+      _redirectToRequiredScreen();
     } on FirebaseAuthException catch (e) {
       setState(() {
         _isLoading = false;
@@ -206,11 +202,5 @@ class _LoginPageState extends State<LoginPage> {
       caseNumberController: TextEditingController(),
       courtIdController: TextEditingController(),
     );
-  }
-
-  void _toggleFormMode() {
-    setState(() {
-      _isLoginForm = !_isLoginForm;
-    });
   }
 }

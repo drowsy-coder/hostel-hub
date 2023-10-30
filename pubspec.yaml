@@ -63,6 +63,10 @@ dependencies:
   in_app_webview: ^0.0.3
   syncfusion_flutter_pdfviewer: ^20.4.54
   geolocator: ^10.1.0
+  audioplayers: ^5.2.0
+  google_mlkit_face_detection: ^0.8.0
+  flutter_face_api: ^5.2.2
+  image_picker: ^1.0.4
 
 
 
@@ -92,6 +96,9 @@ flutter:
   assets:
     - assets/images/
     - assets/json/
+    - assets/failed.mp3
+    - assets/scan_beep.wav
+    - assets/success.mp3
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

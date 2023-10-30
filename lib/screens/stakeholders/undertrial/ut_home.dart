@@ -58,12 +58,12 @@ class _UTHomeState extends State<UTHome> {
             actions: [
               IconButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CaseInfoAnalyzer(),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const CaseInfoAnalyzer(),
+                  //   ),
+                  // );
                 },
                 icon: const Icon(Icons.search),
               ),
