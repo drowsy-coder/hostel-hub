@@ -35,8 +35,8 @@ class _LawyerScreenState extends State<LawyerScreen> {
         screen: const LocatioDisplayScreen(), icon: Icons.chat, text: "Chat"),
     ScreenModel(
         screen: const LawyerNews(), icon: Icons.read_more, text: "News"),
-    ScreenModel(
-        screen: LocationTrackingScreen(), icon: Icons.add, text: "Documents"),
+    //ScreenModel(
+    //screen: LocationTrackingScreen(), icon: Icons.add, text: "Documents"),
   ];
 
   @override
@@ -58,17 +58,18 @@ class _LawyerScreenState extends State<LawyerScreen> {
                 selectedColor: Colors.yellow,
               ),
               DotNavigationBarItem(
-                icon: const Icon(Icons.chat),
+                icon: const Icon(Icons.location_on_outlined),
                 selectedColor: Colors.yellow,
               ),
               DotNavigationBarItem(
                 icon: const Icon(Icons.read_more),
                 selectedColor: Colors.yellow,
               ),
-              DotNavigationBarItem(
+              /** DotNavigationBarItem(
                 icon: const Icon(Icons.add),
                 selectedColor: Colors.yellow,
               ),
+              */
             ],
             selectedItemColor: Colors.yellow,
             unselectedItemColor: Colors.white));
