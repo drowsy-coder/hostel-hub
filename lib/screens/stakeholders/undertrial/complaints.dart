@@ -3,13 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../login/login_method.dart';
-
-void main() {
-  runApp(const MaterialApp(home: Complaints()));
-}
-
 class Complaints extends StatelessWidget {
   const Complaints({super.key});
 
@@ -170,7 +163,7 @@ class _ComplaintsFormState extends State<ComplaintsForm> {
             dropDownItemCount: categoryList.length,
             dropDownList: categoryList,
             onChanged: (val) {
-              // Handle the selected category here if needed
+              _CategoryController.text = val?.value;
             },
           ),
           const SizedBox(height: 10),
