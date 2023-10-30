@@ -155,11 +155,40 @@ class _AbsentStudentsListState extends State<AbsentStudentsList> {
             itemCount: absentStudents!.length,
             itemBuilder: (context, index) {
               return Card(
-                elevation: 3,
-                margin: EdgeInsets.all(8),
+                elevation: 5, // Increase elevation for a stronger shadow
+                margin: EdgeInsets.all(12), // Increase margin for more spacing
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(10), // Add rounded corners
+                ),
                 child: ListTile(
+                  contentPadding: EdgeInsets.all(
+                      16), // Add padding for more space around the content
+                  leading: CircleAvatar(
+                    backgroundImage: AssetImage(
+                        'assets/images/User Avatar.png'), // Add a user avatar image
+                    radius: 30,
+                  ),
                   title: Text(
-                      '${absentStudents[index]['name']} - ${absentStudents[index]['registrationNumber']}'),
+                    '${absentStudents[index]['name']}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold, // Make the name bold
+                      fontSize: 18, // Increase font size
+                    ),
+                  ),
+                  subtitle: Text(
+                    'Reg. Number: ${absentStudents[index]['registrationNumber']}',
+                    style: TextStyle(
+                      color: Colors.grey, // Change subtitle text color
+                    ),
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(Icons.info), // Add an info icon to the right
+                    onPressed: () {
+                      // Add an action when the info icon is pressed
+                      // You can show more details or perform an action here.
+                    },
+                  ),
                 ),
               );
             },

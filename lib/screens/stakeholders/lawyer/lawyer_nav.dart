@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
+import 'package:law_help/screens/stakeholders/lawyer/home/show_cases.dart';
 import 'package:law_help/screens/stakeholders/lawyer/lawyer_chat.dart';
 import 'package:law_help/screens/stakeholders/lawyer/lawyer_doc.dart';
 import 'package:law_help/screens/stakeholders/lawyer/home/lawyer_home.dart';
@@ -33,10 +34,9 @@ class _LawyerScreenState extends State<LawyerScreen> {
     ScreenModel(screen: AbsentStudentsScreen(), icon: Icons.home, text: "Home"),
     ScreenModel(
         screen: const LocatioDisplayScreen(), icon: Icons.chat, text: "Chat"),
+    ScreenModel(screen: ComplaintsList(), icon: Icons.read_more, text: "News"),
     ScreenModel(
-        screen: const LawyerNews(), icon: Icons.read_more, text: "News"),
-    //ScreenModel(
-    //screen: LocationTrackingScreen(), icon: Icons.add, text: "Documents"),
+        screen: LocationTrackingScreen(), icon: Icons.add, text: "Documents"),
   ];
 
   @override
