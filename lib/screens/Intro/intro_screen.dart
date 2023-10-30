@@ -16,13 +16,13 @@ class _IntroScreenState extends State<IntroScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[800],
+      backgroundColor: Colors.grey[700],
       body: Stack(
         children: [
           PageView(
             onPageChanged: (value) {
               setState(() {
-                onLastPage = value == 3;
+                onLastPage = value == 2;
               });
             },
             controller: _controller,
@@ -31,32 +31,19 @@ class _IntroScreenState extends State<IntroScreen> {
               buildFeaturePage(
                   "For hostelers",
                   [
-                    "Your Path to Fairness",
-                    "Legal Education and Awareness",
-                    "Case Monitoring and Updates",
-                    "Direct Comms with Your Lawyer",
-                    "Emotional Support and Counseling",
+                    "Mark your attendance",
+                    "Get your daily mess menu",
+                    "Ease of complaint registration",
                   ],
                   'assets/images/target.png'),
               buildFeaturePage(
-                  "For Lawyers",
+                  "For Hostel Admins",
                   [
-                    "Your Ultimate Legal Toolkit",
-                    "Effortless Case Management",
-                    "Courtroom Preparation",
-                    "Stay Updated on Legal Trends",
+                    "The Ultimate Admin Toolkit",
+                    "Effortless Complaint Management",
+                    "Ease of Mess and Attendace Records"
                   ],
-                  'assets/images/lawyer2.png'),
-              buildFeaturePage(
-                  "For Court Officials",
-                  [
-                    "Pioneering Judicial Efficiency",
-                    "Integration with Court Systems",
-                    "Streamlined Case Tracking",
-                    "Efficient Hearing Management",
-                    "Paperless Record Management",
-                  ],
-                  'assets/images/judge-2.png'),
+                  'assets/images/admin.png'),
             ],
           ),
           Align(
@@ -80,12 +67,13 @@ class _IntroScreenState extends State<IntroScreen> {
                   ),
                   SmoothPageIndicator(
                     controller: _controller,
-                    count: 4,
+                    count: 3,
                   ),
                   GestureDetector(
                     child: Text(
                       onLastPage ? "Done" : "Next",
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 255, 165, 165)),
                     ),
                     onTap: () {
                       if (onLastPage) {
@@ -118,7 +106,7 @@ class _IntroScreenState extends State<IntroScreen> {
       children: [
         const SizedBox(height: 200),
         Card(
-          color: const Color(0xFF1D1F33),
+          color: const Color(0xFFFFFFFF),
           elevation: 10,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -139,10 +127,10 @@ class _IntroScreenState extends State<IntroScreen> {
                   style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                      color: Color.fromARGB(255, 0, 70, 127)),
                 ),
                 const Text(
-                  "न्याय Sahaya",
+                  "hostelHub",
                   style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
@@ -150,22 +138,23 @@ class _IntroScreenState extends State<IntroScreen> {
                 ),
                 const SizedBox(height: 16),
                 Image.asset(
-                  'assets/images/402-legal-balance-legal-unscreen.gif',
+                  'assets/images/students0.png',
                   width: 200,
                   height: 200,
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  "Empowering Undertrials",
+                  "Empowering hostelers",
                   style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                      color: Color.fromARGB(255, 0, 62, 113)),
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  "Legal Aid, Simplified, Accessible and Transparent.",
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  "The one stop for all hosteler needs",
+                  style: TextStyle(
+                      fontSize: 18, color: Color.fromARGB(255, 0, 62, 113)),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -179,12 +168,12 @@ class _IntroScreenState extends State<IntroScreen> {
   Widget buildFeaturePage(
       String title, List<String> features, String imageAsset) {
     return Container(
-      color: Colors.grey[800],
+      color: Colors.grey[600],
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Card(
-            color: const Color(0xFF1D1F33),
+            color: const Color(0xFFFFFFFF),
             elevation: 10,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -198,7 +187,7 @@ class _IntroScreenState extends State<IntroScreen> {
                     style: const TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                        color: Colors.blue),
                   ),
                   const SizedBox(height: 16),
                   Image.asset(
@@ -218,14 +207,15 @@ class _IntroScreenState extends State<IntroScreen> {
                             const Icon(
                               Icons.check_circle,
                               size: 16,
-                              color: Colors.greenAccent,
+                              color: Colors.green,
                             ),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
                                 feature,
                                 style: const TextStyle(
-                                    fontSize: 20, color: Colors.white),
+                                    fontSize: 20,
+                                    color: Color.fromARGB(255, 63, 66, 98)),
                               ),
                             ),
                           ],

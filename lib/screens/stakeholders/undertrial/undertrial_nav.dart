@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 import 'package:flutter/material.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
+import 'package:law_help/screens/stakeholders/undertrial/complaints.dart';
 import 'package:law_help/screens/stakeholders/undertrial/fir_analyser.dart';
 import 'package:law_help/screens/stakeholders/undertrial/ut_chat.dart';
 import 'package:law_help/screens/stakeholders/undertrial/ut_home.dart';
@@ -22,7 +23,7 @@ class _ClientScreenState extends State<ClientScreen> {
   static final List<ScreenModel> screens = [
     ScreenModel(screen: const UTHome(), icon: Icons.home, text: "Home"),
     ScreenModel(
-        screen: const UTSupport(), icon: Icons.support_agent, text: "Request"),
+        screen: Complaints(), icon: Icons.support_agent, text: "Request"),
     ScreenModel(screen: MenuScreen(), icon: Icons.food_bank, text: "Mess"),
     ScreenModel(screen: Face(), icon: Icons.report, text: "Report"),
   ];
@@ -42,19 +43,19 @@ class _ClientScreenState extends State<ClientScreen> {
           backgroundColor: Colors.black,
           items: [
             DotNavigationBarItem(
-              icon: const Icon(Icons.home),
+              icon: const Icon(Icons.home_outlined),
               selectedColor: Colors.yellow,
             ),
             DotNavigationBarItem(
-              icon: const Icon(Icons.report),
+              icon: const Icon(Icons.support_agent_outlined),
               selectedColor: Colors.yellow,
             ),
             DotNavigationBarItem(
-              icon: const Icon(Icons.read_more),
+              icon: const Icon(Icons.food_bank_outlined),
               selectedColor: Colors.yellow,
             ),
             DotNavigationBarItem(
-              icon: const Icon(Icons.food_bank),
+              icon: const Icon(Icons.read_more_outlined),
               selectedColor: Colors.yellow,
             ),
           ],

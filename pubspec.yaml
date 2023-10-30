@@ -67,6 +67,7 @@ dependencies:
   google_mlkit_face_detection: ^0.8.0
   flutter_face_api: ^5.2.2
   image_picker: ^1.0.4
+  dropdown_textfield: ^1.0.8
 
 
 
