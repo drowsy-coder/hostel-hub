@@ -8,6 +8,7 @@ import 'package:law_help/common/utils/screen_size_util.dart';
 import 'package:law_help/common/views/custom_button.dart';
 import 'package:law_help/constants/theme.dart';
 import 'package:law_help/register_face/enter_password_view.dart';
+import 'package:law_help/register_face/register_face_view.dart';
 
 class Face extends StatefulWidget {
   const Face({Key? key}) : super(key: key);
@@ -87,7 +88,7 @@ class _FaceState extends State<Face> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => EnterPasswordView(),
+                      builder: (context) => RegisterFaceView(),
                     ),
                   );
                 },
@@ -109,7 +110,3 @@ class _FaceState extends State<Face> {
     );
   }
 }
-
-
-
-

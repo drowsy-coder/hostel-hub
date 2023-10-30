@@ -35,8 +35,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         setState(() {
           name = userDataMap["name"] ?? "Name Not Found";
           regNumber =
-              userDataMap["registration_number"] ?? "Reg. Number Not Found";
-          roomNumber = userDataMap["room_number"] ?? "Room Number Not Found";
+              userDataMap["registrationNumber"] ?? "Reg. Number Not Found";
+          roomNumber = userDataMap["roomNumber"] ?? "Room Number Not Found";
         });
       }
 
