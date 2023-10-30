@@ -54,7 +54,6 @@ class _LoginPageState extends State<LoginPage> {
           _userRole = stringToUserRole(storedUserRole);
         });
 
-        // Redirect the user to the appropriate screen
         _redirectToRequiredScreen();
       }
     }
