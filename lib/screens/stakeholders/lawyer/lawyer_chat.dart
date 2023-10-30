@@ -53,7 +53,7 @@ class _LocatioDisplayScreenState extends State<LocatioDisplayScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Location Tracking"),
+        title: Text("Personell Tracking"),
         actions: <Widget>[],
       ),
       body: GoogleMap(
