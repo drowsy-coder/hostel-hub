@@ -43,11 +43,18 @@ class MenuScreen extends StatelessWidget {
     },
     'Tuesday': {
       'Breakfast': [
-        MenuItem('Breakfast Item 1', 'assets/food_item_1.jpg'),
-        MenuItem('Breakfast Item 2', 'assets/food_item_2.jpg'),
+        MenuItem('Paneer', 'assets/images/Butter Paneer Low Res.jpeg'),
+        MenuItem('Roti', 'assets/images/Simply Recipes Roti.jpg'),
+        MenuItem('Dal and Rice', 'assets/images/instant-pot-dal-rice.jpg'),
+        MenuItem('Papadam', 'assets/images/Papadams feature.webp'),
+        MenuItem('Pickle', 'assets/images/Mekkekayi-Pickle-2-.png'),
       ],
       'Lunch': [
-        MenuItem('Lunch Item 1', 'assets/food_item_3.jpg'),
+        MenuItem('Paneer', 'assets/images/Butter Paneer Low Res.jpeg'),
+        MenuItem('Roti', 'assets/images/Simply Recipes Roti.jpg'),
+        MenuItem('Dal and Rice', 'assets/images/instant-pot-dal-rice.jpg'),
+        MenuItem('Papadam', 'assets/images/Papadams feature.webp'),
+        MenuItem('Pickle', 'assets/images/Mekkekayi-Pickle-2-.png'),
       ],
       'Snacks': [
         MenuItem('Snacks Item 1', 'assets/food_item_4.jpg'),
@@ -278,13 +285,14 @@ class _MenuItemCardState extends State<MenuItemCard> {
           children: [
             Image.asset(
               widget.menuItem.imageAsset,
-              fit: BoxFit.cover,
-              height: 100,
+              fit: BoxFit.fill,
+              height: 200,
+              width: 200,
             ),
             ListTile(
               title: Text(
                 widget.menuItem.foodItem,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ),
           ],
