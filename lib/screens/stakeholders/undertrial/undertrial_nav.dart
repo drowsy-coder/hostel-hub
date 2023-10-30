@@ -23,7 +23,8 @@ class _ClientScreenState extends State<ClientScreen> {
     ScreenModel(
         screen: const UTSupport(), icon: Icons.support_agent, text: "Request"),
     ScreenModel(screen: MenuScreen(), icon: Icons.food_bank, text: "Mess"),
-    ScreenModel(screen: const UTMap(), icon: Icons.report, text: "Report"),
+    ScreenModel(
+        screen: const UTMap(), icon: Icons.report, text: "Report"),
   ];
 
   @override

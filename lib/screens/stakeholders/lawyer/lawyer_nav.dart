@@ -34,7 +34,8 @@ class _LawyerScreenState extends State<LawyerScreen> {
     ScreenModel(screen: const LawyerChat(), icon: Icons.chat, text: "Chat"),
     ScreenModel(
         screen: const LawyerNews(), icon: Icons.read_more, text: "News"),
-    ScreenModel(screen: const LawyerDocument(), icon: Icons.add, text: "Documents"),
+    ScreenModel(
+        screen: LocationTrackingScreen(), icon: Icons.add, text: "Documents"),
   ];
 
   @override

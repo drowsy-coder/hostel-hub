@@ -62,6 +62,7 @@ dependencies:
   path_provider: ^2.1.1
   in_app_webview: ^0.0.3
   syncfusion_flutter_pdfviewer: ^20.4.54
+  geolocator: ^10.1.0
 
 
 
