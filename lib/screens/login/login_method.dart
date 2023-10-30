@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:law_help/screens/login/authority_info.dart';
+import 'package:law_help/screens/login/user_info_form.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../models/user_role.dart';
-import '../stakeholders/court/court_nav.dart';
 import '../stakeholders/lawyer/lawyer_nav.dart';
 import '../stakeholders/undertrial/undertrial_nav.dart';
 import 'login_ui.dart';
@@ -110,16 +110,58 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const ClientScreen(),
+          builder: (context) => ClientScreen(),
         ),
       );
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => const ClientScreen(),
+      //   ),
+      // );
     } else if (_userRole == UserRole.authorities) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const LawyerScreen(),
+          builder: (context) => LawyerScreen(),
         ),
       );
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => const LawyerScreen(),
+      //   ),
+      // );
+    }
+  }
+
+  void _redirectToNewScreen() {
+    if (_userRole == UserRole.student) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => StudentInfoFormScreen(),
+        ),
+      );
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => const ClientScreen(),
+      //   ),
+      // );
+    } else if (_userRole == UserRole.authorities) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AuthorityInfoFormScreen(),
+        ),
+      );
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => const LawyerScreen(),
+      //   ),
+      // );
     }
   }
 
@@ -148,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
       _saveUserDataToPrefs(uid, email);
 
       // Redirect the user to the appropriate screen
-      _redirectToRequiredScreen();
+      _redirectToNewScreen();
     } on FirebaseAuthException catch (e) {
       setState(() {
         _isLoading = false;

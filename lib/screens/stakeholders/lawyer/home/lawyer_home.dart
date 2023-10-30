@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:law_help/screens/stakeholders/lawyer/cardScreens/pdf_view.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
@@ -25,8 +25,8 @@ class AbsentStudentsScreen extends StatelessWidget {
     );
   }
 
-  Future<List<String>> getAbsentStudents() async {
-    List<String> absentStudents = [];
+  Future<List<Map<String, String>>?> getAbsentStudents() async {
+    List<Map<String, String>> absentStudents = [];
 
     try {
       final currentUser = FirebaseAuth.instance.currentUser;
@@ -46,7 +46,9 @@ class AbsentStudentsScreen extends StatelessWidget {
 
           if (attendanceSnapshot.docs.isEmpty) {
             final studentName = studentDoc['name'];
-            absentStudents.add(studentName);
+            final studentNo = studentDoc['registrationNumber'];
+            absentStudents
+                .add({'name': studentName, 'registrationNumber': studentNo});
           }
         }
       }
@@ -58,43 +60,43 @@ class AbsentStudentsScreen extends StatelessWidget {
   }
 
   Future<void> _downloadAbsentStudentsPDF(BuildContext context) async {
-    final List<String> absentStudents = await getAbsentStudents();
+    final List<Map<String, String>>? absentStudents = await getAbsentStudents();
 
-    final pdf = pw.Document();
+    if (absentStudents != null && absentStudents.isNotEmpty) {
+      final pdf = pw.Document();
 
-    for (var i = 0; i < absentStudents.length; i++) {
-      pdf.addPage(pw.Page(
-        build: (pw.Context context) {
-          return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              pw.Header(
-                level: 0,
-                child: pw.Text(
-                  'Absent Students',
+      pdf.addPage(
+        pw.Page(
+          build: (pw.Context context) {
+            return pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Header(
+                  level: 0,
+                  child: pw.Text('Absent Students'),
                 ),
-              ),
-              pw.SizedBox(
-                  height:
-                      10),
-              pw.Text('${i + 1}. ${absentStudents[i]}'),
-            ],
-          );
-        },
-      ));
+                pw.SizedBox(height: 10),
+                for (int i = 0; i < absentStudents.length; i++)
+                  pw.Text(
+                      '${i + 1}. Name: ${absentStudents[i]['name']}, Registration Number: ${absentStudents[i]['registrationNumber']}'),
+              ],
+            );
+          },
+        ),
+      );
+
+      final directory = await getApplicationDocumentsDirectory();
+      final fileName = 'absent_students.pdf';
+      final filePath = '${directory.path}/$fileName';
+      final file = File(filePath);
+      await file.writeAsBytes(await pdf.save());
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => PDFViewScreen(pdfFilePath: filePath),
+        ),
+      );
     }
-
-    final directory = await getApplicationDocumentsDirectory();
-    final fileName = 'absent_students.pdf';
-    final filePath = '${directory.path}/$fileName';
-    final file = File(filePath);
-    await file.writeAsBytes(await pdf.save());
-
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => PDFViewScreen(pdfFilePath: filePath),
-      ),
-    );
   }
 }
 
@@ -104,8 +106,8 @@ class AbsentStudentsList extends StatefulWidget {
 }
 
 class _AbsentStudentsListState extends State<AbsentStudentsList> {
-  Future<List<String>> getAbsentStudents() async {
-    List<String> absentStudents = [];
+  Future<List<Map<String, String>>> getAbsentStudents() async {
+    List<Map<String, String>> absentStudents = [];
 
     try {
       final currentUser = FirebaseAuth.instance.currentUser;
@@ -125,7 +127,9 @@ class _AbsentStudentsListState extends State<AbsentStudentsList> {
 
           if (attendanceSnapshot.docs.isEmpty) {
             final studentName = studentDoc['name'];
-            absentStudents.add(studentName);
+            final studentNo = studentDoc['registrationNumber'];
+            absentStudents
+                .add({'name': studentName, 'registrationNumber': studentNo});
           }
         }
       }
@@ -138,7 +142,7 @@ class _AbsentStudentsListState extends State<AbsentStudentsList> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<String>>(
+    return FutureBuilder<List<Map<String, String>>>(
       future: getAbsentStudents(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -154,7 +158,8 @@ class _AbsentStudentsListState extends State<AbsentStudentsList> {
                 elevation: 3,
                 margin: EdgeInsets.all(8),
                 child: ListTile(
-                  title: Text(absentStudents[index]),
+                  title: Text(
+                      '${absentStudents[index]['name']} - ${absentStudents[index]['registrationNumber']}'),
                 ),
               );
             },

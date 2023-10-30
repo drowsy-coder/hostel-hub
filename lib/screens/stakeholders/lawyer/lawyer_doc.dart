@@ -44,22 +44,21 @@ class _LocationTrackingScreenState extends State<LocationTrackingScreen> {
   void startLocationTracking(String uid) {
     Stream<User?> userStream = _auth.authStateChanges();
     userStream.listen((User? user) {
-        positionStreamSubscription =
-            Geolocator.getPositionStream().listen((Position position) {
-          print(position.latitude);
+      positionStreamSubscription =
+          Geolocator.getPositionStream().listen((Position position) {
+        print(position.latitude);
 
-          if (username != null) {
-            _firestore.collection('authority_locations').doc(uid).set({
-              'uid': uid,
-              'username': username,
-              'userRole': userRole,
-              'latitude': position.latitude,
-              'longitude': position.longitude,
-              'timestamp': FieldValue.serverTimestamp(),
-            });
-          }
-        });
-      
+        if (username != null) {
+          _firestore.collection('authority_locations').doc(uid).set({
+            'uid': uid,
+            'username': username,
+            'userRole': userRole,
+            'latitude': position.latitude,
+            'longitude': position.longitude,
+            'timestamp': FieldValue.serverTimestamp(),
+          });
+        }
+      });
     });
   }
 

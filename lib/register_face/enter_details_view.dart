@@ -1,8 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:law_help/common/utils/custom_snackbar.dart';
-import 'package:law_help/common/utils/custom_text_field.dart';
 import 'package:law_help/common/views/custom_button.dart';
 import 'package:law_help/constants/theme.dart';
 import 'package:law_help/model/user_model.dart';
@@ -10,6 +9,7 @@ import 'package:law_help/model/user_model.dart';
 class EnterDetailsView extends StatefulWidget {
   final String image;
   final FaceFeatures faceFeatures;
+
   const EnterDetailsView({
     Key? key,
     required this.image,
@@ -21,9 +21,37 @@ class EnterDetailsView extends StatefulWidget {
 }
 
 class _EnterDetailsViewState extends State<EnterDetailsView> {
-  bool isRegistering = false;
-  final _formFieldKey = GlobalKey<FormFieldState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   final TextEditingController _nameController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _setNameFromFirebase();
+  }
+
+  void _setNameFromFirebase() async {
+    final User? currentUser = _auth.currentUser;
+    if (currentUser != null) {
+      final String userId = currentUser.uid;
+
+      try {
+        final DocumentSnapshot userDoc =
+            await _firestore.collection("users").doc(userId).get();
+
+        if (userDoc.exists) {
+          final String userName = userDoc['name'];
+          setState(() {
+            _nameController.text = userName;
+          });
+        }
+      } catch (e) {
+        print("Error: $e");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +68,7 @@ class _EnterDetailsViewState extends State<EnterDetailsView> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              scaffoldTopGradientClr,
-              scaffoldBottomGradientClr,
-            ],
+            colors: [scaffoldTopGradientClr, scaffoldBottomGradientClr],
           ),
         ),
         child: Center(
@@ -52,22 +77,23 @@ class _EnterDetailsViewState extends State<EnterDetailsView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CustomTextField(
-                  formFieldKey: _formFieldKey,
+                TextFormField(
                   controller: _nameController,
-                  hintText: "Name",
-                  validatorText: "Name cannot be empty",
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                    labelText: "Name",
+                  ),
                 ),
-                CustomButton(
-                  text: "Register Now",
-                  onTap: () async {
-                    if (_formFieldKey.currentState!.validate()) {
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: CustomButton(
+                    text: "Register Now",
+                    onTap: () async {
                       FocusScope.of(context).unfocus();
 
-                      final currentUser = FirebaseAuth.instance.currentUser;
+                      final User? currentUser = _auth.currentUser;
                       if (currentUser != null) {
-                        final userId = currentUser.uid;
-                        print(currentUser.uid);
+                        final String userId = currentUser.uid;
 
                         final user = UserModel(
                           id: userId,
@@ -78,28 +104,21 @@ class _EnterDetailsViewState extends State<EnterDetailsView> {
                         );
 
                         try {
-                          await FirebaseFirestore.instance
+                          await _firestore
                               .collection("face")
                               .doc(userId)
                               .set(user.toJson());
 
                           CustomSnackBar.successSnackBar(
                               "Registration Success!");
-                          Future.delayed(const Duration(seconds: 1), () {
-                            // Reaches HomePage
-                            Navigator.of(context)
-                              ..pop()
-                              ..pop()
-                              ..pop();
-                          });
                         } catch (e) {
                           CustomSnackBar.errorSnackBar(
                               "Registration Failed! Try Again.");
                           print("Error: $e");
                         }
                       }
-                    }
-                  },
+                    },
+                  ),
                 ),
               ],
             ),
