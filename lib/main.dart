@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Nyaya Sahaya',
+      title: 'HostelHub',
       theme: ThemeData.dark(),
       home: const AuthWrapper(),
       debugShowCheckedModeBanner: false,
