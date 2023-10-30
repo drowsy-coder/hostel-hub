@@ -6,7 +6,7 @@
 
 
     <application
-        android:label="न्याय Sahaya"
+        android:label="HostelHub"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

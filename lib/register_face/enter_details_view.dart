@@ -1,13 +1,11 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:law_help/common/utils/custom_snackbar.dart';
 import 'package:law_help/common/utils/custom_text_field.dart';
 import 'package:law_help/common/views/custom_button.dart';
 import 'package:law_help/constants/theme.dart';
 import 'package:law_help/model/user_model.dart';
-import 'package:uuid/uuid.dart';
 
 class EnterDetailsView extends StatefulWidget {
   final String image;
@@ -62,49 +60,44 @@ class _EnterDetailsViewState extends State<EnterDetailsView> {
                 ),
                 CustomButton(
                   text: "Register Now",
-                  onTap: () {
+                  onTap: () async {
                     if (_formFieldKey.currentState!.validate()) {
                       FocusScope.of(context).unfocus();
 
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) => const Center(
-                          child: CircularProgressIndicator(
-                            color: accentColor,
-                          ),
-                        ),
-                      );
+                      final currentUser = FirebaseAuth.instance.currentUser;
+                      if (currentUser != null) {
+                        final userId = currentUser.uid;
+                        print(currentUser.uid);
 
-                      String userId = Uuid().v1();
-                      UserModel user = UserModel(
-                        id: userId,
-                        name: _nameController.text.trim().toUpperCase(),
-                        image: widget.image,
-                        registeredOn: DateTime.now().millisecondsSinceEpoch,
-                        faceFeatures: widget.faceFeatures,
-                      );
+                        final user = UserModel(
+                          id: userId,
+                          name: _nameController.text.trim().toUpperCase(),
+                          image: widget.image,
+                          registeredOn: DateTime.now().millisecondsSinceEpoch,
+                          faceFeatures: widget.faceFeatures,
+                        );
 
-                      FirebaseFirestore.instance
-                          .collection("face")
-                          .doc(userId)
-                          .set(user.toJson())
-                          .catchError((e) {
-                        log("Registration Error: $e");
-                        Navigator.of(context).pop();
-                        CustomSnackBar.errorSnackBar(
-                            "Registration Failed! Try Again.");
-                      }).whenComplete(() {
-                        Navigator.of(context).pop();
-                        CustomSnackBar.successSnackBar("Registration Success!");
-                        Future.delayed(const Duration(seconds: 1), () {
-                          //Reaches HomePage
-                          Navigator.of(context)
-                            ..pop()
-                            ..pop()
-                            ..pop();
-                        });
-                      });
+                        try {
+                          await FirebaseFirestore.instance
+                              .collection("face")
+                              .doc(userId)
+                              .set(user.toJson());
+
+                          CustomSnackBar.successSnackBar(
+                              "Registration Success!");
+                          Future.delayed(const Duration(seconds: 1), () {
+                            // Reaches HomePage
+                            Navigator.of(context)
+                              ..pop()
+                              ..pop()
+                              ..pop();
+                          });
+                        } catch (e) {
+                          CustomSnackBar.errorSnackBar(
+                              "Registration Failed! Try Again.");
+                          print("Error: $e");
+                        }
+                      }
                     }
                   },
                 ),

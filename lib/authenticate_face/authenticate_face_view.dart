@@ -4,9 +4,11 @@ import 'dart:math' as math;
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_face_api/face_api.dart' as regula;
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:law_help/authenticate_face/scanning_animation/animated_view.dart';
 import 'package:law_help/authenticate_face/user_details_view.dart';
@@ -45,6 +47,54 @@ class _AuthenticateFaceViewState extends State<AuthenticateFaceView> {
   UserModel? loggingUser;
   bool isMatching = false;
   int trialNumber = 1;
+
+  Future<void> checkLocationAndMarkAttendance() async {
+    // Define the target coordinates (latitude and longitude) where the user should be present.
+    final double targetLatitude =
+        12.8396339; // Replace with your target latitude
+    final double targetLongitude =
+        80.1551999; // Replace with your target longitude
+
+    // Initialize the Geolocator
+    final Geolocator geolocator = Geolocator();
+
+    // Check the user's current location
+    final Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    // Calculate the distance between the user's location and the target coordinates
+    final double distance = Geolocator.distanceBetween(
+      position.latitude,
+      position.longitude,
+      targetLatitude,
+      targetLongitude,
+    );
+
+    // Define a threshold (e.g., 50 meters) for considering the user as present
+    final double threshold = 50.0; // You can adjust this threshold as needed.
+
+    if (distance <= threshold) {
+      // User is within the specified range, mark them present in the "attendance" collection.
+      final String userId = FirebaseAuth.instance.currentUser!.uid;
+
+      if (userId != null) {
+        final DateTime now = DateTime.now();
+
+        // Create a document in the "attendance" collection with the user's UID and the current date and time.
+        await FirebaseFirestore.instance.collection('attendance').add({
+          'uid': userId,
+          'timestamp': now,
+        });
+
+        // You can also show a success message to the user.
+        CustomSnackBar.successSnackBar("Attendance marked successfully!");
+      }
+    } else {
+      // User is outside the specified range, you can show an error message.
+      CustomSnackBar.errorSnackBar("You are not within the attendance range.");
+    }
+  }
 
   @override
   void dispose() {
@@ -278,6 +328,8 @@ class _AuthenticateFaceViewState extends State<AuthenticateFaceView> {
           ..stop()
           ..setReleaseMode(ReleaseMode.release)
           ..play(AssetSource("success.mp3"));
+
+        await checkLocationAndMarkAttendance();
 
         setState(() {
           trialNumber = 1;

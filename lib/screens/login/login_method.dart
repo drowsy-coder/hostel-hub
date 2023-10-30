@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
     _initSharedPreferences();
   }
 
-  void _initSharedPreferences() async {
+  Future<void> _initSharedPreferences() async {
     _prefs = await SharedPreferences.getInstance();
     final bool isLoggedIn = _prefs.getBool('isLoggedIn') ?? false;
 

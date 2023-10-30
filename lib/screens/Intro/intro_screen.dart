@@ -29,7 +29,7 @@ class _IntroScreenState extends State<IntroScreen> {
             children: [
               buildIntroductionPage(),
               buildFeaturePage(
-                  "For undertrials",
+                  "For hostelers",
                   [
                     "Your Path to Fairness",
                     "Legal Education and Awareness",
@@ -179,7 +179,7 @@ class _IntroScreenState extends State<IntroScreen> {
   Widget buildFeaturePage(
       String title, List<String> features, String imageAsset) {
     return Container(
-      color: Colors.grey[800], 
+      color: Colors.grey[800],
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
