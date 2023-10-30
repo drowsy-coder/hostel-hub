@@ -21,7 +21,10 @@ class _LocatioDisplayScreenState extends State<LocatioDisplayScreen> {
   }
 
   void fetchAuthorityLocations() {
-    _firestore.collection('authority_locations').get().then((QuerySnapshot snapshot) {
+    _firestore
+        .collection('authority_locations')
+        .get()
+        .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot document) {
         final data = document.data() as Map<String, dynamic>;
         final uid = data['uid'];
@@ -60,8 +63,9 @@ class _LocatioDisplayScreenState extends State<LocatioDisplayScreen> {
           });
         },
         initialCameraPosition: CameraPosition(
-          target: LatLng(0, 0), // Set the initial camera position to your desired location
-          zoom: 10, // Set the initial zoom level
+          target: LatLng(12.8396339,
+              80.1551999), // Set the initial camera position to your desired location
+          zoom: 17, // Set the initial zoom level
         ),
         markers: _markers,
       ),
