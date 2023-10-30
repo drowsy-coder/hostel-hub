@@ -47,7 +47,7 @@ class _UTHomeState extends State<UTHome> {
         }
 
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const NoCasesFoundScreen();
+          return WelcomeScreen();
         }
 
         final document = snapshot.data!.docs.first;
