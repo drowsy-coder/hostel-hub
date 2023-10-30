@@ -58,17 +58,18 @@ class _LawyerScreenState extends State<LawyerScreen> {
                 selectedColor: Colors.yellow,
               ),
               DotNavigationBarItem(
-                icon: const Icon(Icons.chat),
+                icon: const Icon(Icons.location_on_outlined),
                 selectedColor: Colors.yellow,
               ),
               DotNavigationBarItem(
                 icon: const Icon(Icons.read_more),
                 selectedColor: Colors.yellow,
               ),
-              DotNavigationBarItem(
+              /** DotNavigationBarItem(
                 icon: const Icon(Icons.add),
                 selectedColor: Colors.yellow,
               ),
+              */
             ],
             selectedItemColor: Colors.yellow,
             unselectedItemColor: Colors.white));
