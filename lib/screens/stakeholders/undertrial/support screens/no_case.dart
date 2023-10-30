@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:law_help/screens/stakeholders/undertrial/support%20screens/mental/chat_support.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -78,6 +79,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Hello!"),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.chat_bubble_outline_sharp),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ChatBotScreen()),
+              );
+            },
+          )
+        ],
       ),
       body: Center(
         child: Column(

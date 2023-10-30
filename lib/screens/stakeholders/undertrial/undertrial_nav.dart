@@ -25,7 +25,7 @@ class _ClientScreenState extends State<ClientScreen> {
     ScreenModel(screen: const UTHome(), icon: Icons.home, text: "Home"),
     ScreenModel(
         screen: Complaints(), icon: Icons.support_agent, text: "Request"),
-    ScreenModel(screen: ChatBotScreen(), icon: Icons.food_bank, text: "Mess"),
+    ScreenModel(screen: MenuScreen(), icon: Icons.food_bank, text: "Mess"),
     ScreenModel(screen: Face(), icon: Icons.report, text: "Report"),
   ];
 
