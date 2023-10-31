@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:law_help/screens/stakeholders/undertrial/support%20screens/mental/chat_support.dart';
+import 'package:law_help/screens/stakeholders/undertrial/ut_support.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -85,7 +86,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ChatBotScreen()),
+                MaterialPageRoute(builder: (context) => UTSupport()),
               );
             },
           )
