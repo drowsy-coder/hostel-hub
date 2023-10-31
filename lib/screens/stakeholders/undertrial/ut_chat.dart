@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:law_help/screens/stakeholders/undertrial/ut%20map/no_food.dart';
 
 void main() {
   runApp(const MenuApp());
 }
 
 class MenuApp extends StatelessWidget {
-  const MenuApp({super.key});
+  const MenuApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Today\'s Menu'),
+          title: Text("Today's Menu"),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.close), // Cross symbol
+              onPressed: () {
+                // Navigate to the "No Food" screen
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => NoFoodScreen(),
+                ));
+              },
+            ),
+          ],
         ),
         body: MenuScreen(),
       ),
@@ -141,13 +153,28 @@ class MenuScreen extends StatelessWidget {
     final currentMealType = getCurrentMealType();
     final menuItems = menuData[currentDay]?[currentMealType] ?? [];
 
-    return ListView(
-      children: [
-        MenuCard(
-          title: currentMealType,
-          menuItems: menuItems,
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Today's Menu"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.close), // Cross symbol
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => NoFoodScreen(),
+              ));
+            },
+          ),
+        ],
+      ),
+      body: ListView(
+        children: [
+          MenuCard(
+            title: currentMealType,
+            menuItems: menuItems,
+          ),
+        ],
+      ),
     );
   }
 
