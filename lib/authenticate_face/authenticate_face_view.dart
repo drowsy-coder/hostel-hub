@@ -49,21 +49,15 @@ class _AuthenticateFaceViewState extends State<AuthenticateFaceView> {
   int trialNumber = 1;
 
   Future<void> checkLocationAndMarkAttendance() async {
-    // Define the target coordinates (latitude and longitude) where the user should be present.
-    final double targetLatitude =
-        12.8396339; // Replace with your target latitude
-    final double targetLongitude =
-        80.1551999; // Replace with your target longitude
+    final double targetLatitude = 12.8396339;
+    final double targetLongitude = 80.1551999;
 
-    // Initialize the Geolocator
     final Geolocator geolocator = Geolocator();
 
-    // Check the user's current location
     final Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
 
-    // Calculate the distance between the user's location and the target coordinates
     final double distance = Geolocator.distanceBetween(
       position.latitude,
       position.longitude,
@@ -71,7 +65,6 @@ class _AuthenticateFaceViewState extends State<AuthenticateFaceView> {
       targetLongitude,
     );
 
-    // Define a threshold (e.g., 50 meters) for considering the user as present
     final double threshold = 50.0; // You can adjust this threshold as needed.
 
     if (distance <= threshold) {
