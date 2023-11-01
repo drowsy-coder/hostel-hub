@@ -3,11 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:law_help/authenticate_face/authenticate_face_view.dart';
 import 'package:law_help/common/utils/custom_snackbar.dart';
-import 'package:law_help/common/utils/extensions/size_extension.dart';
 import 'package:law_help/common/utils/screen_size_util.dart';
 import 'package:law_help/common/views/custom_button.dart';
-import 'package:law_help/constants/theme.dart';
-import 'package:law_help/register_face/enter_password_view.dart';
 import 'package:law_help/register_face/register_face_view.dart';
 
 class Face extends StatefulWidget {
@@ -18,27 +15,23 @@ class Face extends StatefulWidget {
 }
 
 class _FaceState extends State<Face> {
-  bool isUserRegistered = false; // Track if the user is already registered
+  bool isUserRegistered = false;
 
   @override
   void initState() {
     super.initState();
-    // Check if the current user's UID is already registered in the "face" collection
     checkIfUserIsRegistered();
   }
 
-  // Function to check if the current user's UID is registered in the "face" collection
   void checkIfUserIsRegistered() {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
-      // Use Firebase Firestore to check if the UID exists in the "face" collection
       FirebaseFirestore.instance
           .collection('face')
           .doc(currentUser.uid)
           .get()
           .then((doc) {
         if (doc.exists) {
-          // The user is registered, so hide the "Register User" button
           setState(() {
             isUserRegistered = true;
           });
@@ -59,42 +52,31 @@ class _FaceState extends State<Face> {
     initializeUtilContexts(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Attendance System 🚨"),
+        backgroundColor: Colors.blue,
+      ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.black,
-              Colors.grey[900]!,
-            ],
-          ),
-        ),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "Attendance System 🚨",
-              style: TextStyle(
-                color: textColor,
-                fontSize: 0.033.sh,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            SizedBox(height: 0.07.sh),
-            if (!isUserRegistered) // Display the button only if the user is not registered
-              CustomButton(
+            const SizedBox(height: 20),
+            Image.asset('assets/images/Checklist Background Removed.png'),
+            const SizedBox(height: 20),
+            if (!isUserRegistered)
+              CardButton(
                 text: "Register User",
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => RegisterFaceView(),
+                      builder: (context) => const RegisterFaceView(),
                     ),
                   );
                 },
               ),
-            SizedBox(height: 0.025.sh),
-            CustomButton(
+            const SizedBox(height: 20),
+            CardButton(
               text: "Mark Attendance",
               onTap: () {
                 Navigator.of(context).push(
@@ -105,6 +87,47 @@ class _FaceState extends State<Face> {
               },
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class CardButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onTap;
+
+  CardButton({required this.text, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green, Colors.red],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
         ),
       ),
     );
