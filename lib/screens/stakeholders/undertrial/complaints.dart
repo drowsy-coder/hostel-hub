@@ -11,7 +11,7 @@ class Complaints extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Complaint'),
-        centerTitle: true, // Center the title in the app bar
+        backgroundColor: Colors.blue,
       ),
       body: Center(
         child: Padding(

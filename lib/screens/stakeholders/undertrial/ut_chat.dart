@@ -16,9 +16,8 @@ class MenuApp extends StatelessWidget {
           title: Text("Today's Menu"),
           actions: [
             IconButton(
-              icon: Icon(Icons.close), // Cross symbol
+              icon: Icon(Icons.telegram),
               onPressed: () {
-                // Navigate to the "No Food" screen
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => NoFoodScreen(),
                 ));
@@ -156,9 +155,10 @@ class MenuScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Today's Menu"),
+        backgroundColor: Colors.blue,
         actions: [
           IconButton(
-            icon: Icon(Icons.close), // Cross symbol
+            icon: Icon(Icons.local_dining), // Cross symbol
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => NoFoodScreen(),

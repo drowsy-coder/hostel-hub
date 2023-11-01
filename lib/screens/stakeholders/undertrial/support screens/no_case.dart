@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:law_help/screens/stakeholders/undertrial/support%20screens/mental/chat_support.dart';
+import 'package:law_help/screens/stakeholders/undertrial/support%20screens/vocational/nik.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -78,121 +79,81 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Hello!"),
+        backgroundColor: Colors.blue,
+        title: Text("Welcome, $name!"),
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.chat_bubble_outline_sharp),
+            icon: Icon(Icons.chat_bubble_outline, color: Colors.white),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ChatBotScreen()),
+                MaterialPageRoute(builder: (context) => MentalSupportScreen()),
               );
             },
           )
         ],
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            AnimatedOpacity(
-              duration: Duration(seconds: 1),
-              opacity: 1,
-              child: Card(
-                elevation: 10,
-                margin: EdgeInsets.all(20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start, // Align to the left
-                    children: <Widget>[
-                      SizedBox(height: 20), // Increase spacing
-                      Text(
-                        "👤 Name: $name",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 20), // Increase spacing
-                      Text(
-                        "🔢 Reg Number: $regNumber",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 20), // Increase spacing
-                      Text(
-                        "🏠 Room Number: $roomNumber",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 20), // Increase spacing
-                    ],
-                  ),
-                ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(height: 20),
+              CardWidget(
+                icon: Icons.person,
+                text: "Name: $name",
               ),
-            ),
-            // Card(
-            //   elevation: 10,
-            //   margin: EdgeInsets.all(20),
-            //   shape: RoundedRectangleBorder(
-            //     borderRadius: BorderRadius.circular(15),
-            //   ),
-            //   child: Padding(
-            //     padding: const EdgeInsets.all(20.0),
-            //     child: Text(
-            //       isPresent ? "✅ Present" : "❌ Not Present",
-            //       style: TextStyle(
-            //         fontSize: 24,
-            //         color: isPresent ? Colors.green : Colors.red,
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            Card(
-              elevation: 10,
-              margin: EdgeInsets.all(20),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+              CardWidget(
+                icon: Icons.confirmation_number,
+                text: "Reg Number: $regNumber",
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Text(
-                  "🍽 Upcoming Meal: $upcomingMeal",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              CardWidget(
+                icon: Icons.home,
+                text: "Room Number: $roomNumber",
               ),
-            ),
-            Card(
-              elevation: 10,
-              margin: EdgeInsets.all(20),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+              SizedBox(height: 20),
+              CardWidget(
+                icon: Icons.restaurant,
+                text: "Upcoming Meal: $upcomingMeal",
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Text(
-                  "👚 Chhota Dhobi: 5th Nov",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              CardWidget(
+                icon: Icons.calendar_today,
+                text: "Chhota Dhobi: 5th Nov",
               ),
-            ),
-          ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CardWidget extends StatelessWidget {
+  final IconData icon;
+  final String text;
+
+  CardWidget({required this.icon, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 5,
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: ListTile(
+        leading: Icon(
+          icon,
+          size: 36,
+          color: Colors.indigo,
+        ),
+        title: Text(
+          text,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
