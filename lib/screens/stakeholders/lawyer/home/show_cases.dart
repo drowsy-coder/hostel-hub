@@ -22,15 +22,11 @@ class _ComplaintsListViewState extends State<ComplaintsListView> {
 
   void startLocationTracking() {
     Stream<User?> userStream = FirebaseAuth.instance.authStateChanges();
-    Timer? locationUpdateTimer;
-
     userStream.listen((User? user) {
       if (user != null) {
-        locationUpdateTimer?.cancel(); // Cancel any existing timer
-        locationUpdateTimer = Timer.periodic(Duration(seconds: 5), (timer) {
-          Geolocator.getCurrentPosition().then((Position position) {
-            uploadLocation(user.uid, position.latitude, position.longitude);
-          });
+        positionStreamSubscription =
+            Geolocator.getPositionStream().listen((Position position) {
+          uploadLocation(user.uid, position.latitude, position.longitude);
         });
       }
     });
@@ -55,19 +51,12 @@ class _ComplaintsListViewState extends State<ComplaintsListView> {
           'latitude': latitude,
           'longitude': longitude,
           'timestamp': FieldValue.serverTimestamp(),
-          'username': username,
+          'username': username, // Include the username in the location data
         });
       }
     }).catchError((error) {
       print('Error fetching user data: $error');
     });
-  }
-
-  Future<void> deleteComplaint(String complaintId) async {
-    await FirebaseFirestore.instance
-        .collection('complaints')
-        .doc(complaintId)
-        .delete();
   }
 
   void removeSelectedComplaints() {
@@ -90,21 +79,13 @@ class _ComplaintsListViewState extends State<ComplaintsListView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Complaints List'),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.refresh,
-            ),
-            onPressed: () {},
-          ),
-        ],
+        title: Text('Complaints List'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('complaints').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
           }
           complaints = snapshot.data!.docs;
           return ListView.builder(
@@ -120,7 +101,7 @@ class _ComplaintsListViewState extends State<ComplaintsListView> {
                     .get(),
                 builder: (context, userSnapshot) {
                   if (!userSnapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
+                    return Center(child: CircularProgressIndicator());
                   }
                   final userData =
                       userSnapshot.data!.data() as Map<String, dynamic>;
@@ -128,75 +109,89 @@ class _ComplaintsListViewState extends State<ComplaintsListView> {
                   final userName = userData['name'];
                   final userRegNo = userData['registrationNumber'];
                   if (userRole == 'student') {
-                    return Card(
-                      margin: const EdgeInsets.all(8),
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
+                    return Dismissible(
+                      key: UniqueKey(),
+                      direction: DismissDirection.endToStart,
+                      onDismissed: (direction) {
+                        setState(() {
+                          complaints.removeAt(index);
+                        });
+                      },
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerRight,
+                        child: Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
                       ),
-                      child: ListTile(
-                        title: Text(
-                          'Complaint Category: ${complaintData['Category']}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            decoration: TextDecoration.underline,
+                      child: Card(
+                        margin: EdgeInsets.all(8),
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            'Complaint Category: ${complaintData['Category']}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                            ),
                           ),
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 8),
-                            const Text(
-                              'Description:',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green,
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 8),
+                              Text(
+                                'Description:',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green,
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8),
-                              child: Text('${complaintData['deScription']}'),
-                            ),
-                            const SizedBox(height: 8),
-                            const Text(
-                              'Complainant:',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red,
+                              Text(
+                                '${complaintData['deScription']}',
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8),
-                              child: Text('$userName'),
-                            ),
-                            const SizedBox(height: 8),
-                            const Text(
-                              'Registration Number:',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.orange,
+                              SizedBox(height: 8),
+                              Text(
+                                'Complainant:',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8),
-                              child: Text('$userRegNo'),
-                            ),
-                          ],
-                        ),
-                        trailing: Checkbox(
-                          value: selectedComplaints.contains(index),
-                          onChanged: (bool? checked) {
-                            if (checked != null) {
-                              setState(() {
-                                if (checked) {
-                                  selectedComplaints.add(index);
-                                } else {
-                                  selectedComplaints.remove(index);
-                                }
-                              });
-                            }
-                          },
+                              Text(
+                                '$userName',
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                'Registration Number:',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                              Text(
+                                '$userRegNo',
+                              ),
+                            ],
+                          ),
+                          trailing: Checkbox(
+                            value: selectedComplaints.contains(index),
+                            onChanged: (bool? checked) {
+                              if (checked != null) {
+                                setState(() {
+                                  if (checked) {
+                                    selectedComplaints.add(index);
+                                  } else {
+                                    selectedComplaints.remove(index);
+                                  }
+                                });
+                              }
+                            },
+                          ),
                         ),
                       ),
                     );
