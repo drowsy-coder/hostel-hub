@@ -1,29 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:law_help/screens/stakeholders/undertrial/ut%20map/no_food.dart';
 
 void main() {
   runApp(const MenuApp());
 }
 
 class MenuApp extends StatelessWidget {
-  const MenuApp({Key? key}) : super(key: key);
+  const MenuApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Today's Menu"),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.telegram),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => NoFoodScreen(),
-                ));
-              },
-            ),
-          ],
+          title: const Text('Today\'s Menu'),
         ),
         body: MenuScreen(),
       ),
@@ -35,92 +24,102 @@ class MenuScreen extends StatelessWidget {
   final Map<String, Map<String, List<MenuItem>>> menuData = {
     'Monday': {
       'Breakfast': [
-        MenuItem('Breakfast Item 1', 'assets/images/3526220.png'),
-        MenuItem('Breakfast Item 2', 'assets/images/3526220.png'),
-        MenuItem('Breakfast Item 2', 'assets/images/3526220.png'),
-        MenuItem('Breakfast Item 2', 'assets/images/3526220.png'),
-        MenuItem('Breakfast Item 2', 'assets/images/3526220.png'),
+        MenuItem('Poori with White Channa', 'assets/images/poori_chana.jpeg'),
+        MenuItem(
+            'Idli , Sambar and Groundnut Chutney', 'assets/images/idli.jpeg'),
+        MenuItem('Vada', 'assets/images/vada.jpeg'),
+        MenuItem('Bread , Butter and Jam', 'assets/images/breadjam.jpeg'),
+        MenuItem('Tea/Coffee', 'assets/images/teacoffee.jpeg'),
       ],
       'Lunch': [
-        MenuItem('Lunch Item 1', 'assets/food_item_3.jpg'),
+        MenuItem('Oil Chapathi', 'assets/images/oilchapati.jpeg'),
+        MenuItem('Aloo Peas', 'assets/images/aloo_peas.jpeg'),
+        MenuItem('Tomato Rice', 'assets/images/tomatorice.jpeg'),
+        MenuItem('White Rice', 'assets/images/white_rice.jpeg'),
+        MenuItem('Sambar', 'assets/images/sambar.jpeg'),
+        MenuItem('Curd', 'assets/images/curd.jpeg'),
+        MenuItem('Rasam', 'assets/images/rasam.jpeg'),
+        MenuItem('Parupu Podi', 'assets/images/parupu_podi.jpeg'),
+        MenuItem('Fruits', 'assets/images/fruits.jpeg'),
       ],
       'Snacks': [
-        MenuItem('Snacks Item 1', 'assets/food_item_4.jpg'),
-        MenuItem('Snacks Item 2', 'assets/food_item_5.jpg'),
+        MenuItem('Tea/Coffee', 'assets/images/food_item_4.jpg'),
+        MenuItem('Samosa', 'assets/images/food_item_5.jpg'),
       ],
       'Dinner': [
-        MenuItem('Dinner Item 1', 'assets/food_item_6.jpg'),
+        MenuItem('Dinner Item 1', 'assets/images/food_item_6.jpg'),
       ],
     },
     'Tuesday': {
       'Breakfast': [
-        MenuItem('Paneer', 'assets/images/Butter Paneer Low Res.jpeg'),
-        MenuItem('Roti', 'assets/images/Simply Recipes Roti.jpg'),
-        MenuItem('Dal and Rice', 'assets/images/instant-pot-dal-rice.jpg'),
-        MenuItem('Papadam', 'assets/images/Papadams feature.webp'),
-        MenuItem('Pickle', 'assets/images/Mekkekayi-Pickle-2-.png'),
+        MenuItem('Breakfast Item 1', 'assets/images/food_item_1.jpg'),
+        MenuItem('Breakfast Item 2', 'assets/images/food_item_2.jpg'),
       ],
       'Lunch': [
-        MenuItem('Paneer', 'assets/images/Butter Paneer Low Res.jpeg'),
-        MenuItem('Roti', 'assets/images/Simply Recipes Roti.jpg'),
-        MenuItem('Dal and Rice', 'assets/images/instant-pot-dal-rice.jpg'),
-        MenuItem('Papadam', 'assets/images/Papadams feature.webp'),
-        MenuItem('Pickle', 'assets/images/Mekkekayi-Pickle-2-.png'),
+        MenuItem('Lunch Item 1', 'assets/images/food_item_3.jpg'),
       ],
       'Snacks': [
-        MenuItem('Snacks Item 1', 'assets/food_item_4.jpg'),
-        MenuItem('Snacks Item 2', 'assets/food_item_5.jpg'),
+        MenuItem('Snacks Item 1', 'assets/images/food_item_4.jpg'),
+        MenuItem('Snacks Item 2', 'assets/images/food_item_5.jpg'),
       ],
       'Dinner': [
-        MenuItem('Dinner Item 1', 'assets/food_item_6.jpg'),
+        MenuItem('Dinner Item 1', 'assets/images/food_item_6.jpg'),
       ],
     },
     'Wednesday': {
       'Breakfast': [
-        MenuItem('Breakfast Item 1', 'assets/food_item_1.jpg'),
-        MenuItem('Breakfast Item 2', 'assets/food_item_2.jpg'),
+        MenuItem('Breakfast Item 1', 'assets/images/food_item_1.jpg'),
+        MenuItem('Breakfast Item 2', 'assets/images/food_item_2.jpg'),
       ],
       'Lunch': [
-        MenuItem('Lunch Item 1', 'assets/food_item_3.jpg'),
+        MenuItem('Lunch Item 1', 'assets/images/food_item_3.jpg'),
       ],
       'Snacks': [
-        MenuItem('Snacks Item 1', 'assets/food_item_4.jpg'),
-        MenuItem('Snacks Item 2', 'assets/food_item_5.jpg'),
+        MenuItem('Tea/Coffee', 'assets/images/teacoffee.jpeg'),
+        MenuItem('Samosa', 'assets/images/samosa.jpg'),
       ],
       'Dinner': [
-        MenuItem('Dinner Item 1', 'assets/food_item_6.jpg'),
+        MenuItem('Oil Chapathi', 'assets/images/oilchapati.jpeg'),
+        MenuItem('Aloo Peas', 'assets/images/aloo_peas.jpeg'),
+        MenuItem('Tomato Rice', 'assets/images/tomatorice.jpeg'),
+        MenuItem('White Rice', 'assets/images/white_rice.jpeg'),
+        MenuItem('Sambar', 'assets/images/sambar.jpeg'),
+        MenuItem('Curd', 'assets/images/curd.curd'),
+        MenuItem('Rasam', 'assets/images/rasam.jpeg'),
+        MenuItem('Parupu Podi', 'assets/images/parupu_podi.jpeg'),
+        MenuItem('Fruits', 'assets/images/fruits.jpeg'),
       ],
     },
     'Friday': {
       'Breakfast': [
-        MenuItem('Breakfast Item 1', 'assets/food_item_1.jpg'),
-        MenuItem('Breakfast Item 2', 'assets/food_item_2.jpg'),
+        MenuItem('Breakfast Item 1', 'assets/images/food_item_1.jpg'),
+        MenuItem('Breakfast Item 2', 'assets/images/food_item_2.jpg'),
       ],
       'Lunch': [
-        MenuItem('Lunch Item 1', 'assets/food_item_3.jpg'),
+        MenuItem('Lunch Item 1', 'assets/images/food_item_3.jpg'),
       ],
       'Snacks': [
-        MenuItem('Snacks Item 1', 'assets/food_item_4.jpg'),
-        MenuItem('Snacks Item 2', 'assets/food_item_5.jpg'),
+        MenuItem('Snacks Item 1', 'assets/images/food_item_4.jpg'),
+        MenuItem('Snacks Item 2', 'assets/images/food_item_5.jpg'),
       ],
       'Dinner': [
-        MenuItem('Dinner Item 1', 'assets/food_item_6.jpg'),
+        MenuItem('Dinner Item 1', 'assets/images/food_item_6.jpg'),
       ],
     },
     'Saturday': {
       'Breakfast': [
-        MenuItem('Breakfast Item 1', 'assets/food_item_1.jpg'),
-        MenuItem('Breakfast Item 2', 'assets/food_item_2.jpg'),
+        MenuItem('Breakfast Item 1', 'assets/images/food_item_1.jpg'),
+        MenuItem('Breakfast Item 2', 'assets/images/food_item_2.jpg'),
       ],
       'Lunch': [
-        MenuItem('Lunch Item 1', 'assets/food_item_3.jpg'),
+        MenuItem('Lunch Item 1', 'assets/images/food_item_3.jpg'),
       ],
       'Snacks': [
-        MenuItem('Snacks Item 1', 'assets/food_item_4.jpg'),
-        MenuItem('Snacks Item 2', 'assets/food_item_5.jpg'),
+        MenuItem('Snacks Item 1', 'assets/images/food_item_4.jpg'),
+        MenuItem('Snacks Item 2', 'assets/images/food_item_5.jpg'),
       ],
       'Dinner': [
-        MenuItem('Dinner Item 1', 'assets/food_item_6.jpg'),
+        MenuItem('Dinner Item 1', 'assets/images/food_item_6.jpg'),
       ],
     },
     'Sunday': {
@@ -132,14 +131,14 @@ class MenuScreen extends StatelessWidget {
         MenuItem('Breakfast Item 2', 'assets/images/3526220.png'),
       ],
       'Lunch': [
-        MenuItem('Lunch Item 1', 'assets/food_item_3.jpg'),
+        MenuItem('Lunch Item 1', 'assets/images/food_item_3.jpg'),
       ],
       'Snacks': [
-        MenuItem('Snacks Item 1', 'assets/food_item_4.jpg'),
-        MenuItem('Snacks Item 2', 'assets/food_item_5.jpg'),
+        MenuItem('Snacks Item 1', 'assets/images/food_item_4.jpg'),
+        MenuItem('Snacks Item 2', 'assets/images/food_item_5.jpg'),
       ],
       'Dinner': [
-        MenuItem('Dinner Item 1', 'assets/food_item_6.jpg'),
+        MenuItem('Dinner Item 1', 'assets/images/food_item_6.jpg'),
       ],
     },
   };
@@ -152,29 +151,13 @@ class MenuScreen extends StatelessWidget {
     final currentMealType = getCurrentMealType();
     final menuItems = menuData[currentDay]?[currentMealType] ?? [];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Today's Menu"),
-        backgroundColor: Colors.blue,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.local_dining), // Cross symbol
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => NoFoodScreen(),
-              ));
-            },
-          ),
-        ],
-      ),
-      body: ListView(
-        children: [
-          MenuCard(
-            title: currentMealType,
-            menuItems: menuItems,
-          ),
-        ],
-      ),
+    return ListView(
+      children: [
+        MenuCard(
+          title: currentMealType,
+          menuItems: menuItems,
+        ),
+      ],
     );
   }
 
@@ -312,14 +295,13 @@ class _MenuItemCardState extends State<MenuItemCard> {
           children: [
             Image.asset(
               widget.menuItem.imageAsset,
-              fit: BoxFit.fill,
-              height: 200,
-              width: 200,
+              fit: BoxFit.cover,
+              height: 100,
             ),
             ListTile(
               title: Text(
                 widget.menuItem.foodItem,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
           ],
